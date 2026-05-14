@@ -1,0 +1,148 @@
+type _ImmutableObjectStorageRefillResult = 
+ record {
+   success: opt bool;
+   topped_up_amount: opt nat;
+ };
+type _ImmutableObjectStorageRefillInformation = record {
+                                                  proposed_top_up_amount:
+                                                   opt nat;};
+type _ImmutableObjectStorageCreateCertificateResult = 
+ record {
+   blob_hash: text;
+   method: text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UserProfile = 
+ record {
+   createdAt: Timestamp;
+   name: text;
+   "principal": principal;
+   role: text;
+ };
+type Timestamp = int;
+type QuestionPaperInput = 
+ record {
+   department: text;
+   paperType: text;
+   pdfFileId: FileId;
+   regulation: text;
+   semester: nat;
+   subject: text;
+   year: nat;
+ };
+type QuestionPaper = 
+ record {
+   createdAt: Timestamp;
+   department: text;
+   id: nat;
+   paperType: text;
+   pdfFileId: FileId;
+   regulation: text;
+   semester: nat;
+   subject: text;
+   uploadedBy: principal;
+   year: nat;
+ };
+type NoteInput = 
+ record {
+   aiSummary: text;
+   department: text;
+   pdfFileId: FileId;
+   semester: nat;
+   subject: text;
+   topic: text;
+   transcript: text;
+   unit: text;
+   year: nat;
+ };
+type NoteFilters = 
+ record {
+   department: opt text;
+   semester: opt nat;
+   subject: opt text;
+   unit: opt text;
+   year: opt nat;
+ };
+type Note = 
+ record {
+   aiSummary: text;
+   createdAt: Timestamp;
+   createdBy: principal;
+   department: text;
+   id: nat;
+   pdfFileId: FileId;
+   semester: nat;
+   subject: text;
+   topic: text;
+   transcript: text;
+   unit: text;
+   year: nat;
+ };
+type FileId = text;
+type DashboardStats = 
+ record {
+   recentNotes: vec Note;
+   totalNotes: nat;
+   totalQuestionPapers: nat;
+   totalStudents: nat;
+   totalSubjects: nat;
+ };
+type AnalyticsData = 
+ record {
+   activeStudents: nat;
+   notesPerDay: vec record {
+                      text;
+                      nat;
+                    };
+   papersPerDepartment: vec record {
+                              text;
+                              nat;
+                            };
+   totalDownloads: nat;
+ };
+service : {
+  _immutableObjectStorageBlobsAreLive: (hashes: vec blob) -> (vec bool) query;
+  _immutableObjectStorageBlobsToDelete: () -> (vec blob) query;
+  _immutableObjectStorageConfirmBlobDeletion: (blobs: vec blob) -> ();
+  _immutableObjectStorageCreateCertificate: (blobHash: text) ->
+   (_ImmutableObjectStorageCreateCertificateResult);
+  _immutableObjectStorageRefillCashier: (refillInformation:
+   opt _ImmutableObjectStorageRefillInformation) ->
+   (_ImmutableObjectStorageRefillResult);
+  _immutableObjectStorageUpdateGatewayPrincipals: () -> ();
+  _initializeAccessControl: () -> ();
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  createNote: (input: NoteInput) -> (opt Note);
+  deleteNote: (id: nat) -> (bool);
+  generateAISummary: (transcript: text) -> (opt text);
+  getAnalytics: (days: nat) -> (AnalyticsData) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getDashboardStats: () -> (DashboardStats) query;
+  getNote: (id: nat) -> (opt Note) query;
+  getNotes: (filters: NoteFilters, page: nat, pageSize: nat) ->
+   (record {
+      notes: vec Note;
+      total: nat;
+    }) query;
+  getQuestionPapers: (filters: NoteFilters, page: nat, pageSize: nat) ->
+   (record {
+      papers: vec QuestionPaper;
+      total: nat;
+    }) query;
+  getStudents: () -> (vec UserProfile) query;
+  getUserProfile: () -> (opt UserProfile) query;
+  isCallerAdmin: () -> (bool) query;
+  isOpenAIConfigured: () -> (bool) query;
+  searchNotes: (searchTerm: text, filters: NoteFilters) -> (vec Note) query;
+  searchQuestionPapers: (searchTerm: text) -> (vec QuestionPaper) query;
+  setOpenAIApiKey: (key: text) -> ();
+  setUserProfile: (name: text) -> (UserProfile);
+  summarizeTranscript: (transcript: text) -> (opt text);
+  updateNote: (id: nat, input: NoteInput) -> (opt Note);
+  uploadQuestionPaper: (input: QuestionPaperInput) -> (opt QuestionPaper);
+}

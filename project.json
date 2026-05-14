@@ -1,0 +1,28 @@
+{
+  "overview": "AI Academic Assistant is a premium full-stack academic platform with separate Teacher and Student portals. Teachers can upload audio lectures, generate AI transcripts and summaries, organize notes by subject hierarchy, upload question papers, and view analytics. Students can browse, search, and download notes and question papers. Features glassmorphic dark UI with smooth animations and neon glow effects.",
+  "features": [
+    "Teacher portal with full content management",
+    "AI audio transcription and summary generation",
+    "Hierarchical notes organization (Department→Year→Semester→Subject→Unit→Topic)",
+    "Question paper upload and management",
+    "Student read-only access with search and PDF downloads",
+    "Role-based authentication (teacher/student)",
+    "Analytics dashboard with charts",
+    "Premium glassmorphic dark UI with Motion animations",
+    "Real-time debounced search with filters",
+    "PDF generation for notes"
+  ],
+  "category": "education",
+  "tags": [
+    "education",
+    "ai",
+    "academic",
+    "teacher",
+    "student",
+    "transcription",
+    "notes",
+    "question-papers",
+    "analytics"
+  ],
+  "last_updated": "2026-05-13T07:22:58.470Z"
+}
